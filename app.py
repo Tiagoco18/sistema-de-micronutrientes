@@ -1,18 +1,16 @@
-import streamlit as st
+ï»¿import streamlit as st
 import requests
 import os
 
 st.title("Sistema de Micronutrientes")
 
-# Configurar conexão Turso
 url = os.getenv("DATABASE_URL")
 auth_token = os.getenv("DATABASE_AUTH_TOKEN")
 
 if not url or not auth_token:
-    st.error("? Secrets não configurados!")
+    st.error("Secrets nao configurados!")
 else:
     try:
-        # Teste de conexão
         headers = {"Authorization": f"Bearer {auth_token}"}
         response = requests.post(
             f"{url}/v2/query",
@@ -20,8 +18,8 @@ else:
             headers=headers
         )
         if response.status_code == 200:
-            st.success("? Banco de dados conectado!")
+            st.success("Banco de dados conectado!")
         else:
-            st.error(f"? Erro na conexão: {response.text}")
+            st.error(f"Erro na conexao: {response.text}")
     except Exception as e:
-        st.error(f"? Erro: {e}")
+        st.error(f"Erro: {e}")
