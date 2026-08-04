@@ -7,6 +7,9 @@ try:
     url = st.secrets["url"]
     auth_token = st.secrets["auth_token"]
     
+    # Converter libsql:// para https://
+    url = url.replace("libsql://", "https://")
+    
     headers = {"Authorization": f"Bearer {auth_token}"}
     response = requests.post(
         f"{url}/v2/query",
