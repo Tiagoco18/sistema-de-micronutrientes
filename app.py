@@ -1,18 +1,27 @@
 import streamlit as st
+import requests
 import os
-from libsql_client import create_client_sync
-
-# Configurar cliente Turso
-url = os.getenv("DATABASE_URL")
-auth_token = os.getenv("DATABASE_AUTH_TOKEN")
-client = create_client_sync(url=url, auth_tokens=auth_token)
 
 st.title("Sistema de Micronutrientes")
-st.write("Conectado ao banco de dados!")
 
-# Teste de conexão
-try:
-    result = client.execute("SELECT 1")
-    st.success("? Banco de dados conectado!")
-except Exception as e:
-    st.error(f"? Erro: {e}")
+# Configurar conexão Turso
+url = os.getenv("DATABASE_URL")
+auth_token = os.getenv("DATABASE_AUTH_TOKEN")
+
+if not url or not auth_token:
+    st.error("? Secrets não configurados!")
+else:
+    try:
+        # Teste de conexão
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.post(
+            f"{url}/v2/query",
+            json={"queries": [{"q": "SELECT 1 as teste"}]},
+            headers=headers
+        )
+        if response.status_code == 200:
+            st.success("? Banco de dados conectado!")
+        else:
+            st.error(f"? Erro na conexão: {response.text}")
+    except Exception as e:
+        st.error(f"? Erro: {e}")
