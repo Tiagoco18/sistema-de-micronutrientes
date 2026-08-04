@@ -12,7 +12,7 @@ try:
     
     headers = {"Authorization": f"Bearer {auth_token}"}
     response = requests.post(
-        f"{url}/v2/query",
+        f"{url}/v1/query",
         json={"queries": [{"q": "SELECT 1 as teste"}]},
         headers=headers
     )
